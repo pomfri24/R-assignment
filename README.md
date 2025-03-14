@@ -53,7 +53,7 @@ dvst_cleaned <- dvst %>%
 
 # Data visualization ------------------------------------------------------
 
-SNPs per Chromosome:
+#SNPs per Chromosome:
   
   # Plot total SNPs across categories (assuming this represents SNP counts for different categories)
   ggplot(dvst, aes(x = factor(1), y = `total SNPs`, fill = factor(1))) +
@@ -62,7 +62,7 @@ SNPs per Chromosome:
   labs(title = "Total SNPs Across Categories", x = "Category", y = "Total SNPs") +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
-Homozygosity vs. Heterozygosity:
+#Homozygosity vs. Heterozygosity:
   
   # Assuming you can create a column for Heterozygosity
   dvst <- dvst %>%
@@ -74,7 +74,7 @@ ggplot(dvst, aes(x = Heterozygosity, fill = Heterozygosity)) +
   theme_minimal() +
   labs(title = "Proportion of Homozygous vs Heterozygous Sites", x = "Genotype", y = "Proportion")
 
-Missing Data:
+#Missing Data:
   
   # Create a new column to indicate missing data
   dvst <- dvst %>%
@@ -87,7 +87,7 @@ ggplot(dvst, aes(x = factor(1), fill = Missing)) +
   labs(title = "Proportion of Missing Data", x = "Category", y = "Proportion") +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
-Distribution of Heterozygosity:
+#Distribution of Heterozygosity:
   
   # Plotting the distribution of heterozygosity
   ggplot(dvst, aes(x = `Heterozygosity`, fill = factor(1))) +
@@ -95,7 +95,7 @@ Distribution of Heterozygosity:
   theme_minimal() +
   labs(title = "Distribution of Heterozygosity", x = "Heterozygosity", y = "Density")
 
-Your Own Visualization:
+#Your Own Visualization:
   
   # Plotting Theta across samples
   ggplot(dvst, aes(x = `Theta`, fill = factor(1))) +
