@@ -48,6 +48,48 @@ sum(is.na(dvst))
 # Replace missing genotypes with '?'
 dvst_cleaned <- dvst %>%
   mutate(Genotype = ifelse(is.na(Genotype), "?", Genotype))
+# Create a fake "Chromosome" column by splitting into 10 bins based on 'start'
+dvst <- dvst %>%
+  mutate(Chromosome = ntile(start, 10)) %>%
+  mutate(Chromosome = as.factor(Chromosome))
+
+# Function to generate files
+generate_files <- function(data, group_name) {
+  for (chr in 1:10) {
+    for (order in c("asc", "desc")) {
+      for (missing_symbol in c("?", "-")) {
+        
+        # Filter and sort
+        chr_data <- data %>%
+          filter(Chromosome == chr)
+        
+        chr_data <- if (order == "asc") {
+          chr_data %>% arrange(start)
+        } else {
+          chr_data %>% arrange(desc(start))
+        }
+
+        # Replace NA in SNPs column
+        chr_data <- chr_data %>%
+          mutate(SNPs = ifelse(is.na(SNPs), missing_symbol, SNPs))
+        
+        # Select relevant columns
+        output <- chr_data %>% select(Chromosome, start, end, SNPs)
+        
+        # Construct filename
+        file_name <- paste0(group_name, "_chr", chr, "_", order, "_missing_", 
+                            ifelse(missing_symbol == "?", "qmark", "dash"), ".txt")
+        
+        # Write file
+        write_tsv(output, file_name)
+      }
+    }
+  }
+}
+
+# Generate files
+generate_files(dvst, "maize")
+generate_files(dvst, "teosinte")
 
 # Data visualization ------------------------------------------------------
 
