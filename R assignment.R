@@ -96,11 +96,14 @@ generate_files(dvst, "teosinte")
 SNPs per Chromosome:
   
   # Plot total SNPs across categories (assuming this represents SNP counts for different categories)
-  ggplot(dvst, aes(x = factor(1), y = `total SNPs`, fill = factor(1))) +
+  library(ggplot2)
+
+ggplot(dvst, aes(x = factor(start), y = `total SNPs`, fill = `total SNPs`)) +
   geom_bar(stat = "identity") +
   theme_minimal() +
-  labs(title = "Total SNPs Across Categories", x = "Category", y = "Total SNPs") +
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  labs(title = "Total SNPs Across Genomic Intervals", x = "Start Position", y = "Total SNPs") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 6))
+
 
 Homozygosity vs. Heterozygosity:
   
@@ -115,17 +118,15 @@ ggplot(dvst, aes(x = Heterozygosity, fill = Heterozygosity)) +
   labs(title = "Proportion of Homozygous vs Heterozygous Sites", x = "Genotype", y = "Proportion")
 
 Missing Data:
-  
-  # Create a new column to indicate missing data
-  dvst <- dvst %>%
-  mutate(Missing = ifelse(is.na(`SNPs`), "Missing", "Not Missing"))
-
-# Plotting missing data for each category
-ggplot(dvst, aes(x = factor(1), fill = Missing)) +
-  geom_bar(stat = "count", position = "fill") +
+  # Plotting missing data for each category
+ggplot(missing_summary, aes(x = Variable, y = ProportionMissing, fill = Variable)) +
+  geom_bar(stat = "identity") +
   theme_minimal() +
-  labs(title = "Proportion of Missing Data", x = "Category", y = "Proportion") +
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  labs(title = "Proportion of Missing Data per Variable",
+       x = "Variable",
+       y = "Proportion Missing") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
 
 Distribution of Heterozygosity:
   
